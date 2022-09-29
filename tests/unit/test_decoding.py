@@ -1,4 +1,4 @@
-from app import decoding
+from main import decoding
 
 
 def test_decode_with_url():

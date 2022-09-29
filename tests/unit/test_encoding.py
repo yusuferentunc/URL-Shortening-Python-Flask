@@ -1,4 +1,4 @@
-from app import encoding
+from main import encoding
 
 
 def test_encode_with_id():
