@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 urls = {}
 
-url_base = os.environ.get('URL_BASE')
+url_base = os.environ.get('URL_BASE', 'http://short.est/')
 
 
 @app.errorhandler(400)
@@ -17,6 +17,8 @@ def bad_request(e):
 
 def encoding(url_id):
     """Base36 Encoding"""
+    if not isinstance(url_id,int) or url_id <= 0:
+        return None
     table = "0123456789abcdefghijklmnopqrstuvwxyz"
     result = ''
     while url_id > 0:
@@ -27,6 +29,8 @@ def encoding(url_id):
 
 def decoding(short):
     """Base36 Decoding"""
+    if not isinstance(short, str):
+        return None
     result = 0
     for character in short:
         if ord('a') <= ord(character) <= ord('z'):
