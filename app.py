@@ -1,12 +1,18 @@
 import os
 import random
-from flask import Flask, jsonify, request
+import validators
+from flask import Flask, jsonify, request, abort
 
 app = Flask(__name__)
 
 urls = {}
 
 url_base = os.environ.get('URL_BASE')
+
+
+@app.errorhandler(400)
+def bad_request(e):
+    return jsonify(error=str(e)), 400
 
 
 def encoding(url_id):
@@ -41,9 +47,12 @@ def id_generate():
 @app.route("/encode", methods=['POST'])
 def encode_url():
     """Encoding URL"""
+    data = request.json
+    url = data.get('url')
+    if not validators.url(url):
+        abort(400, description="Invalid URL")
     url_id = id_generate()
     encoded_url = encoding(url_id)
-    data = request.json
     urls[url_id] = data.get('url')
     return jsonify({'result': encoded_url})
 
@@ -53,6 +62,8 @@ def decode_url():
     """Decoding URL"""
     data = request.json
     short_url = data.get('short_url')
+    if not validators.url(short_url) or short_url[:len(url_base)] != url_base:
+        abort(400, description="Invalid URL")
     url_id = decoding(short_url[len(url_base):])
     url = urls.get(url_id)
     return jsonify({'result': url})
