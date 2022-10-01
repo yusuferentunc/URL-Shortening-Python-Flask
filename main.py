@@ -9,7 +9,7 @@ url_base = os.environ.get('URL_BASE', 'http://short.est/')
 
 
 def encoding(url_id):
-    """Base36 Encoding"""
+    """Encodes given id to base32 code"""
     if not isinstance(url_id, int) or url_id <= 0:
         return None
     table = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -21,7 +21,7 @@ def encoding(url_id):
 
 
 def decoding(short):
-    """Base36 Decoding"""
+    """Decodes given base32 code to integer id"""
     if not isinstance(short, str):
         return None
     result = 0
@@ -34,7 +34,7 @@ def decoding(short):
 
 
 def id_generate():
-    """Id Generation"""
+    """Generates randomly unique integer ids between 36^2 and 36^5-1"""
     number = random.randint(36 ** 2, 36 ** 5 - 1)
     while urls.get(str(number)) is not None:
         number = random.randint(36 ** 2, 36 ** 5 - 1)
@@ -42,16 +42,18 @@ def id_generate():
 
 
 def create_app(config=None):
+    """Creates url shortening service with encode and decode endpoints"""
     app = Flask(__name__)
     app.config.update(config or {})
 
     @app.errorhandler(400)
     def bad_request(e):
+        """Changes 400 errors to json format"""
         return jsonify(error=str(e)), 400
 
     @app.route("/encode", methods=['POST'])
     def encode_url():
-        """Encoding URL"""
+        """Endpoint for shortening long urls"""
         data = request.json
         if not isinstance(data, dict):
             abort(400, description="Invalid JSON")
@@ -65,7 +67,7 @@ def create_app(config=None):
 
     @app.route("/decode", methods=['POST'])
     def decode_url():
-        """Decoding URL"""
+        """Endpoint for returning long url from short one"""
         data = request.json
         if not isinstance(data, dict):
             abort(400, description="Invalid JSON")
