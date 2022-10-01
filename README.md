@@ -20,10 +20,10 @@
 ### Run API
 ```
 $ pip install -r requirements.txt
-$ URL_BASE='http://short.est/' PORT=5000 python main.py
+$ URL_BASE='http://short.est/' PORT=5000 python3 main.py
 ```
 ### Testing
 ```
-$ pytest --verbose
+$ python3 -m pytest --verbose
 ```
 - Test command should be executed at current folder of this README.md file
