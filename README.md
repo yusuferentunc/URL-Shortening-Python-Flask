@@ -3,6 +3,17 @@
 ### Requirements
 - Python 3.9
 - Flask
+### Endpoints
+### `/encode`
+- Encodes long url to a short url
+- Accepts POST method only
+- Input format is json as like `{"url":"http://example.org/longurl"}`
+- Output format is json as like `{"result":"http://shorturl.org/shortcode"}`
+### `/decode` 
+- Decodes short url to original url
+- Accepts POST method only 
+- Input format is json as like `{"short_url":"http://shorturl.org/shortcode"}`
+- Output format is json as like `{"result":"http://example.org/longurl"}`
 ### Environment Variables
 - PORT : Port number for application. Default is `5000` 
 - URL_BASE : Base url for short url. Default is `http://short.est/`
