@@ -53,8 +53,10 @@ def create_app(config=None):
     def encode_url():
         """Encoding URL"""
         data = request.json
+        if not isinstance(data, dict):
+            abort(400, description="Invalid JSON")
         url = data.get('url')
-        if not validators.url(url):
+        if url is None or not validators.url(url):
             abort(400, description="Invalid URL")
         url_id = id_generate()
         encoded_url = encoding(url_id)
@@ -65,8 +67,10 @@ def create_app(config=None):
     def decode_url():
         """Decoding URL"""
         data = request.json
+        if not isinstance(data, dict):
+            abort(400, description="Invalid JSON")
         short_url = data.get('short_url')
-        if not validators.url(short_url) or short_url[:len(url_base)] != url_base:
+        if short_url is None or not validators.url(short_url) or short_url[:len(url_base)] != url_base:
             abort(400, description="Invalid URL")
         url_id = decoding(short_url[len(url_base):])
         url = urls.get(url_id)
