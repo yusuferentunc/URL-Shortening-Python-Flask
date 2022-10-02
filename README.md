@@ -17,10 +17,17 @@
 ### Environment Variables
 - PORT : Port number for application. Default is `5000` 
 - URL_BASE : Base url for short url. Default is `http://short.est/`
-### Run API
+### Run API in Development
 ```
 $ pip install -r requirements.txt
 $ URL_BASE='http://short.est/' PORT=5000 python3 main.py
+```
+### RUN API in Production
+```
+$ pip install -r requirements.txt 
+$ pip install waitress
+$ export URL_BASE='http://short.est/'
+$ waitress-serve --port=8080 --host=0.0.0.0 --call 'main:create_app'
 ```
 ### Testing
 ```
